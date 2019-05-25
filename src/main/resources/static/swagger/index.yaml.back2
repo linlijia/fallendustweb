@@ -1,0 +1,195 @@
+swagger: '2.0'
+info:
+  description: 代码千万行，文档第一行。接口不规范，开发两行泪。
+  version: 1.0.0
+  title: 接口文档平台
+
+basePath: /dust
+
+schemes:
+  - http
+
+#认证
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "token"
+    in: "header"
+
+#定义接口数据
+paths:
+  /sys/token:
+    post:
+      tags:
+        - 用户登录
+      summary: 获取token
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 登陆对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/LoginApiForm'
+          required: true
+    responses:
+      '200':
+        description: 返回token信息
+        schema:
+          $ref: '#/definitions/Login'
+
+  /generator/appupdate/download/last:
+    get:
+      tags:
+        - 应用更新
+      summary: 下载最新app
+      produces:
+        - application/json
+    responses:
+      '200':
+        description: 下载文件
+
+  /generator/device/mn/{mn}:
+    get:
+      tags:
+        - 设备管理
+      summary: 根据mn编码查询
+      produces:
+        - application/json
+      parameters:
+        - name: mn
+          description: 设备编码
+          in: path
+          type: String
+          required: true
+      responses:
+        '200':
+          description: 设备
+          schema:
+            type: object
+            properties:
+              code:
+                description: 状态码 0：成功  非0：失败
+                type: integer
+                format: int32
+              user:
+
+#  /generator/deviceimage/upload/{mn}:
+#    get:
+#      tags:
+#        - 设备管理
+#      summary: 上传图片
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: mn
+#          description: 设备编码
+#          in: path
+#          type: String
+#          required: true
+#        - name: file
+#          description: 图片
+#          in: body
+#          type: file
+#          required: true
+#      responses:
+#        '200':
+#          description: 上传结果
+#          schema:
+#            type: object
+#            properties:
+#              code:
+#                description: 状态码 0：成功  非0：失败
+#                type: integer
+#                format: int32
+#               msg:
+#                 description: 失败原因
+#                 type: string
+
+#定义数据模型
+definitions:
+  R:
+      type: object
+      properties:
+        code:
+          description: 状态码 0：成功  非0：失败
+          type: integer
+          format: int32
+        msg:
+          description: 失败原因
+          type: string
+  Login:
+      type: object
+      properties:
+        code:
+          description: 状态码 0：成功  非0：失败
+          type: integer
+          format: int32
+        token:
+          description: token
+          type: string
+        expire:
+          description: 过期时长
+          type: integer
+          format: int32
+        msg:
+          description: 失败原因
+          type: string
+
+  LoginApiForm:
+    type: object
+    properties:
+      username:
+        description: 用户名
+        type: string
+      password:
+        description: 密码
+        type: string
+
+  FileUpload:
+      type: object
+      properties:
+        code:
+          description: 状态码 0：成功  非0：失败
+          type: integer
+          format: int32
+        url:
+          description: 文件URL地址
+          type: string
+        msg:
+          description: 失败原因
+          type: string
+
+  DeviceEntity:
+      type: object
+      properties:
+        id:
+          description: ID
+          type: integer
+          format: int64
+        SiteId:
+          description: 站点ID
+          type: integer
+          format: int64
+        mn:
+          description: 设备编码
+          type: string
+          format: string
+        passwd:
+          description: 密码
+          type: string
+          format: string
+
+        temperatureHumidityLimit:
+          description: 温湿度控制
+          type: string
+          format: string
+        uploadInterval:
+          description: 称量间隔（小时）
+          type: integer
+          format: int64
+        createAt:
+          description: 创建时间
+          type: String
+          format: date-time

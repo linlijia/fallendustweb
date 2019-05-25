@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.modules.generator.dao.DeviceDataDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.modules.generator.entity.DeviceDataEntity" id="deviceDataMap">
+        <result property="id" column="id"/>
+        <result property="qn" column="qn"/>
+        <result property="mn" column="mn"/>
+        <result property="st" column="st"/>
+        <result property="cn" column="cn"/>
+        <result property="pw" column="pw"/>
+        <result property="flag" column="flag"/>
+        <result property="cp" column="cp"/>
+        <result property="dataTime" column="data_time"/>
+        <result property="a34011Rtd" column="a34011_rtd"/>
+        <result property="a34011Ori" column="a34011_ori"/>
+        <result property="a34011Flag" column="a34011_flag"/>
+    </resultMap>
+
+
+</mapper>

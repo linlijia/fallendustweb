@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.generator.dao.AppUpdateDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.modules.generator.entity.AppUpdateEntity" id="appUpdateMap">
+        <result property="id" column="id"/>
+        <result property="appName" column="app_name"/>
+        <result property="version" column="version"/>
+        <result property="createAt" column="create_at"/>
+        <result property="path" column="path"/>
+        <result property="fileName" column="file_name"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.modules.generator.dao.OpsRecordDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.modules.generator.entity.OpsRecordEntity" id="opsRecordMap">
+        <result property="id" column="id"/>
+        <result property="siteId" column="site_ID"/>
+        <result property="opsUser" column="ops_user"/>
+        <result property="address" column="address"/>
+        <result property="opsTime" column="ops_time"/>
+        <result property="siteContact" column="site_contact"/>
+        <result property="sitePhoneNum" column="site_phone_num"/>
+        <result property="movementLevel" column="movement_level"/>
+        <result property="movementLevelNote" column="movement_level_note"/>
+        <result property="filterReplacement" column="filter_replacement"/>
+        <result property="filterReplacementNote" column="filter_replacement_note"/>
+        <result property="weighingDust" column="weighing_dust"/>
+        <result property="weighingDustNote" column="weighing_dust_note"/>
+        <result property="externalDust" column="external_dust"/>
+        <result property="externalDustNote" column="external_dust_note"/>
+        <result property="circulatorySystemDust" column="circulatory_system_dust"/>
+        <result property="circulatorySystemDustNote" column="circulatory_system_dust_note"/>
+        <result property="waterStorage" column="water_storage"/>
+        <result property="waterStorageNote" column="water_storage_note"/>
+        <result property="componentReplacementNote" column="component_replacement_note"/>
+        <result property="componentReplacement" column="component_replacement"/>
+        <result property="equipmentAppearanceCheckNote" column="equipment_appearance_check_note"/>
+        <result property="equipmentAppearanceCheck" column="equipment_appearance_check"/>
+        <result property="deviceStatus" column="device_status"/>
+        <result property="deviceStatusNote" column="device_status_note"/>
+        <result property="opsRecord" column="ops_record"/>
+        <result property="opsRecordNote" column="ops_record_note"/>
+        <result property="createAt" column="create_at"/>
+        <collection property="opsImage" ofType="com.modules.generator.entity.OpsImageEntity"
+                    autoMapping="true">
+        </collection>
+    </resultMap>
+
+
+</mapper>

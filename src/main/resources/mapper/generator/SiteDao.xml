@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.modules.generator.dao.SiteDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.modules.generator.entity.SiteEntity" id="siteMap">
+        <result property="id" column="id"/>
+        <result property="site" column="site"/>
+        <result property="mn" column="mn"/>
+        <result property="district" column="district"/>
+        <result property="superiorSite" column="superior_site"/>
+        <result property="address" column="address"/>
+        <result property="latidute" column="latidute"/>
+        <result property="longidute" column="longidute"/>
+        <result property="contact" column="contact"/>
+        <result property="phoneNo" column="phone_no"/>
+    </resultMap>
+
+
+</mapper>

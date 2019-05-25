@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.generator.dao.DeviceStatusHistoryDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.modules.generator.entity.DeviceStatusHistoryEntity" id="deviceStatusHistoryMap">
+        <result property="id" column="id"/>
+        <result property="qn" column="qn"/>
+        <result property="mn" column="mn"/>
+        <result property="st" column="st"/>
+        <result property="cn" column="cn"/>
+        <result property="dataTime" column="data_time"/>
+        <result property="pw" column="pw"/>
+        <result property="flag" column="flag"/>
+        <result property="cp" column="cp"/>
+        <result property="s10001" column="s10001"/>
+        <result property="s10002" column="s10002"/>
+        <result property="s10003" column="s10003"/>
+        <result property="s10004" column="s10004"/>
+        <result property="s10005" column="s10005"/>
+        <result property="s10006" column="s10006"/>
+        <result property="s10007" column="s10007"/>
+        <result property="s10008" column="s10008"/>
+        <result property="s10009" column="s10009"/>
+        <result property="s10010" column="s10010"/>
+        <result property="s10011" column="s10011"/>
+        <result property="s10012" column="s10012"/>
+        <result property="s10013" column="s10013"/>
+        <result property="s10014" column="s10014"/>
+        <result property="s10015" column="s10015"/>
+        <result property="s10016" column="s10016"/>
+        <result property="s10017" column="s10017"/>
+        <result property="s10018" column="s10018"/>
+        <result property="operation" column="operation"/>
+        <result property="siteId" column="site_id"/>
+        <result property="siteName" column="site_name"/>
+        <result property="city" column="city"/>
+    </resultMap>
+
+
+</mapper>
