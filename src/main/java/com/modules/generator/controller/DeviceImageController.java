@@ -29,7 +29,8 @@ public class DeviceImageController {
     private String uploadPath;
     @Autowired
     private DeviceService deviceService;
-
+    @Value("${file-server}")
+    private String fileServer;
 
     /**
      * 列表
@@ -91,9 +92,11 @@ public class DeviceImageController {
         String filename = file.getOriginalFilename();
         File newFile = new File(path, filename);
         file.transferTo(newFile);
+
+        String filePath = fileServer + "/files/" + "opsImage/" + dateTime + "/" + filename;
         DeviceImageEntity deviceImageEntity = new DeviceImageEntity();
         deviceImageEntity.setMn(mn);
-        deviceImageEntity.setPath(filename);
+        deviceImageEntity.setPath(filePath);
 
         DeviceSiteVO deviceSiteVO = deviceService.selectByDeviceMn(deviceImageEntity.getMn());
         deviceImageEntity.setSiteId(deviceSiteVO.getSiteId());
