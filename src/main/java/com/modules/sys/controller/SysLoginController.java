@@ -29,102 +29,101 @@ import java.util.Map;
 
 @RestController
 public class SysLoginController extends AbstractController {
-	@Autowired
-	private SysUserService sysUserService;
-	@Autowired
-	private SysUserTokenService sysUserTokenService;
-	@Autowired
-	private SysCaptchaService sysCaptchaService;
+    @Autowired
+    private SysUserService sysUserService;
+    @Autowired
+    private SysUserTokenService sysUserTokenService;
+    @Autowired
+    private SysCaptchaService sysCaptchaService;
 
-	/**
-	 * 验证码
-	 */
-	@GetMapping("captcha.jpg")
-	public void captcha(HttpServletResponse response, String uuid)throws ServletException, IOException {
-		response.setHeader("Cache-Control", "no-store, no-cache");
-		response.setContentType("image/jpeg");
+    /**
+     * 验证码
+     */
+    @GetMapping("captcha.jpg")
+    public void captcha(HttpServletResponse response, String uuid) throws ServletException, IOException {
+        response.setHeader("Cache-Control", "no-store, no-cache");
+        response.setContentType("image/jpeg");
 
-		//获取图片验证码
-		BufferedImage image = sysCaptchaService.getCaptcha(uuid);
+        //获取图片验证码
+        BufferedImage image = sysCaptchaService.getCaptcha(uuid);
 
-		ServletOutputStream out = response.getOutputStream();
-		ImageIO.write(image, "jpg", out);
-		IOUtils.closeQuietly(out);
-	}
+        ServletOutputStream out = response.getOutputStream();
+        ImageIO.write(image, "jpg", out);
+        IOUtils.closeQuietly(out);
+    }
 
-	/**
-	 * 登录
-	 */
-	@PostMapping("/sys/login")
-	public Map<String, Object> login(@RequestBody SysLoginForm form)throws IOException {
-		boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
-		if(!captcha){
-			return R.error("验证码不正确");
-		}
+    /**
+     * 登录
+     */
+    @PostMapping("/sys/login")
+    public Map<String, Object> login(@RequestBody SysLoginForm form) throws IOException {
+        boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
+        if (!captcha) {
+            return R.error("验证码不正确");
+        }
 
-		//用户信息
-		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
+        //用户信息
+        SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
 
-		//账号不存在、密码错误
-		if(user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
-			return R.error("账号或密码不正确");
-		}
+        //账号不存在、密码错误
+        if (user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
+            return R.error("账号或密码不正确");
+        }
 
-		//账号锁定
-		if(user.getStatus() == 0){
-			return R.error("账号已被锁定,请联系管理员");
-		}
+        //账号锁定
+        if (user.getStatus() == 0) {
+            return R.error("账号已被锁定,请联系管理员");
+        }
 
-		//生成token，并保存到数据库
-		R r = sysUserTokenService.createToken(user.getUserId());
-		return r;
-	}
-
-
-	/**
-	 * 获取token
-	 */
-	@PostMapping("/sys/token")
-	public Map<String, Object> token(@RequestBody SysLoginForm form)throws IOException {
-		//用户信息
-		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
-
-		//账号不存在、密码错误
-		if(user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
-			return R.error("账号或密码不正确");
-		}
-
-		//账号锁定
-		if(user.getStatus() == 0){
-			return R.error("账号已被锁定,请联系管理员");
-		}
-
-		EntityWrapper<SysUserTokenEntity> wrapper = new EntityWrapper();
-		wrapper.eq("user_id",user.getUserId());
-		SysUserTokenEntity sysUserTokenEntity = sysUserTokenService.selectOne(wrapper);
-		//存在未过期时间小于10分钟的token则返回此token
-		if(sysUserTokenEntity!=null && sysUserTokenEntity.getExpireTime().after(
-				DateUtils.addDateMinutes(new Date(),10))){
-			return R.ok().put("token", sysUserTokenEntity.getToken()).put("expire", sysUserTokenEntity.getExpireTime());
-		}
-
-		//生成token，并保存到数据库
-		R r = sysUserTokenService.createToken(user.getUserId());
-		int expire = Integer.parseInt(r.get("expire").toString());
-		Date date = new Date();
-		r.put("expire", DateUtils.addDateSeconds(date, expire));
-		return r;
-	}
+        //生成token，并保存到数据库
+        R r = sysUserTokenService.createToken(user.getUserId());
+        return r;
+    }
 
 
+    /**
+     * 获取token
+     */
+    @PostMapping("/sys/token")
+    public Map<String, Object> token(@RequestBody SysLoginForm form) throws IOException {
+        //用户信息
+        SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
 
-	/**
-	 * 退出
-	 */
-	@PostMapping("/sys/logout")
-	public R logout() {
-		sysUserTokenService.logout(getUserId());
-		return R.ok();
-	}
-	
+        //账号不存在、密码错误
+        if (user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
+            return R.error("账号或密码不正确");
+        }
+
+        //账号锁定
+        if (user.getStatus() == 0) {
+            return R.error("账号已被锁定,请联系管理员");
+        }
+
+        EntityWrapper<SysUserTokenEntity> wrapper = new EntityWrapper();
+        wrapper.eq("user_id", user.getUserId());
+        SysUserTokenEntity sysUserTokenEntity = sysUserTokenService.selectOne(wrapper);
+        //存在未过期时间小于10分钟的token则返回此token
+        if (sysUserTokenEntity != null && sysUserTokenEntity.getExpireTime().after(
+                DateUtils.addDateMinutes(new Date(), 10))) {
+            return R.ok().put("token", sysUserTokenEntity.getToken()).put("expire", sysUserTokenEntity.getExpireTime());
+        }
+
+        //生成token，并保存到数据库
+        R r = sysUserTokenService.createToken(user.getUserId());
+        int expire = Integer.parseInt(r.get("expire").toString());
+        Date date = new Date();
+        r.put("expire", DateUtils.addDateSeconds(date, expire));
+        return r;
+    }
+
+
+    /**
+     * 退出
+     */
+    @PostMapping("/sys/logout")
+    public R logout() {
+        sysUserTokenService.logout(getUserId());
+        return R.ok();
+    }
+
 }

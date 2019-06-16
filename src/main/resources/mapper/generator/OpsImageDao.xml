@@ -3,7 +3,7 @@
 
 <mapper namespace="com.modules.generator.dao.OpsImageDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.modules.generator.entity.OpsImageEntity" id="opsImageMap">
         <result property="id" column="id"/>
         <result property="recordId" column="record_id"/>

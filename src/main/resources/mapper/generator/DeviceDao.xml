@@ -3,7 +3,7 @@
 
 <mapper namespace="com.modules.generator.dao.DeviceDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.modules.generator.entity.DeviceEntity" id="deviceMap">
         <result property="id" column="id"/>
         <result property="siteId" column="site_id"/>

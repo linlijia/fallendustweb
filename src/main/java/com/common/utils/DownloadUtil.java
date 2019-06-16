@@ -1,9 +1,12 @@
 package com.common.utils;
 
-import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.modules.generator.entity.AppUpdateEntity;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 
 
 /**
@@ -11,121 +14,93 @@ import java.net.URL;
  */
 
 public class DownloadUtil {
-    // 定义下载资源的路径
-    private String path;
-    // 指定所下载的文件的保存位置
-    private String targetFile;
-    // 定义需要使用多少线程下载资源
-    private int threadNum;
-    // 定义下载的线程对象
-    private DownThread[] threads;
-    // 定义下载的文件的总大小
-    private int fileSize;
+    public static void download(HttpServletRequest request, HttpServletResponse response, String fullPath) throws FileNotFoundException {
+        // Get your file stream from wherever.
+        EntityWrapper<AppUpdateEntity> entityEntityWrapper = new EntityWrapper();
+        entityEntityWrapper.orderBy("id", false);
 
-    public DownloadUtil(String path, String targetFile, int threadNum) {
-        this.path = path;
-        this.threadNum = threadNum;
-        // 初始化threads数组
-        threads = new DownThread[threadNum];
-        this.targetFile = targetFile;
-    }
+        File downloadFile = new File(fullPath);
 
-    public void download() throws Exception {
-        URL url = new URL(path);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(5 * 1000);
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty(
-                "Accept",
-                "image/gif, image/jpeg, image/pjpeg, image/pjpeg, "
-                        + "application/x-shockwave-flash, application/xaml+xml, "
-                        + "application/vnd.ms-xpsdocument, application/x-ms-xbap, "
-                        + "application/x-ms-application, application/vnd.ms-excel, "
-                        + "application/vnd.ms-powerpoint, application/msword, */*");
-        conn.setRequestProperty("Accept-Language", "zh-CN");
-        conn.setRequestProperty("Charset", "UTF-8");
-        conn.setRequestProperty("Connection", "Keep-Alive");
-        // 得到文件大小
-        fileSize = conn.getContentLength();
-        conn.disconnect();
-        int currentPartSize = fileSize / threadNum + 1;
-        RandomAccessFile file = new RandomAccessFile(targetFile, "rw");
-        // 设置本地文件的大小
-        file.setLength(fileSize);
-        file.close();
-        for (int i = 0; i < threadNum; i++) {
-            // 计算每条线程的下载的开始位置
-            int startPos = i * currentPartSize;
-            // 每个线程使用一个RandomAccessFile进行下载
-            RandomAccessFile currentPart = new RandomAccessFile(targetFile, "rw");
-            // 定位该线程的下载位置
-            currentPart.seek(startPos);
-            // 创建下载线程
-            threads[i] = new DownThread(startPos, currentPartSize, currentPart);
-            // 启动下载线程
-            threads[i].start();
-        }
-    }
-
-    // 获取下载的完成百分比
-    public double getCompleteRate() {
-        // 统计多条线程已经下载的总大小
-        int sumSize = 0;
-        for (int i = 0; i < threadNum; i++) {
-            sumSize += threads[i].length;
-        }
-        // 返回已经完成的百分比
-        return sumSize * 1.0 / fileSize;
-    }
-
-    private class DownThread extends Thread {
-        // 当前线程的下载位置
-        private int startPos;
-        // 定义当前线程负责下载的文件大小
-        private int currentPartSize;
-        // 当前线程需要下载的文件块
-        private RandomAccessFile currentPart;
-        // 定义已经该线程已下载的字节数
-        public int length;
-
-        public DownThread(int startPos, int currentPartSize, RandomAccessFile currentPart) {
-            this.startPos = startPos;
-            this.currentPartSize = currentPartSize;
-            this.currentPart = currentPart;
+        ServletContext context = request.getServletContext();
+        // get MIME type of the file
+        String mimeType = context.getMimeType(fullPath);
+        if (mimeType == null) {
+            // set to binary type if MIME mapping not found
+            mimeType = "application/octet-stream";
         }
 
-        @Override
-        public void run() {
-            try {
-                URL url = new URL(path);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(5 * 1000);
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty(
-                        "Accept",
-                        "image/gif, image/jpeg, image/pjpeg, image/pjpeg, "
-                                + "application/x-shockwave-flash, application/xaml+xml, "
-                                + "application/vnd.ms-xpsdocument, application/x-ms-xbap, "
-                                + "application/x-ms-application, application/vnd.ms-excel, "
-                                + "application/vnd.ms-powerpoint, application/msword, */*");
-                conn.setRequestProperty("Accept-Language", "zh-CN");
-                conn.setRequestProperty("Charset", "UTF-8");
-                InputStream inStream = conn.getInputStream();
-                // 跳过startPos个字节，表明该线程只下载自己负责哪部分文件。
-                inStream.skip(this.startPos);
-                byte[] buffer = new byte[1024];
-                int hasRead = 0;
-                // 读取网络数据，并写入本地文件
-                while (length < currentPartSize
-                        && (hasRead = inStream.read(buffer)) != -1) {
-                    currentPart.write(buffer, 0, hasRead);
-                    // 累计该线程下载的总大小
-                    length += hasRead;
+        response.setContentType(mimeType);
+
+        String headerKey = "Content-Disposition";
+        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+        response.setHeader(headerKey, headerValue);
+        response.setHeader("Accept-Ranges", "bytes");
+        long downloadSize = downloadFile.length();
+        long fromPos = 0, toPos = 0;
+        if (request.getHeader("Range") == null) {
+            response.setHeader("Content-Length", downloadSize + "");
+        } else {
+            // 若客户端传来Range，说明之前下载了一部分，设置206状态(SC_PARTIAL_CONTENT)
+            response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
+            String range = request.getHeader("Range");
+            String bytes = range.replaceAll("bytes=", "");
+            String[] ary = bytes.split("-");
+            fromPos = Long.parseLong(ary[0]);
+            if (ary.length == 2) {
+                toPos = Long.parseLong(ary[1]);
+            }
+            int size;
+            if (toPos > fromPos) {
+                size = (int) (toPos - fromPos);
+            } else {
+                size = (int) (downloadSize - fromPos);
+            }
+            response.setHeader("Content-Length", size + "");
+            downloadSize = size;
+        }
+        RandomAccessFile in = null;
+        OutputStream out = null;
+        try {
+            in = new RandomAccessFile(downloadFile, "rw");
+            if (fromPos > 0) {
+                in.seek(fromPos);
+            }
+            int bufLen = (int) (downloadSize < 2048 ? downloadSize : 2048);
+            byte[] buffer = new byte[bufLen];
+            int num;
+            int count = 0;
+            out = response.getOutputStream();
+            while ((num = in.read(buffer)) != -1) {
+                out.write(buffer, 0, num);
+                count += num;
+                if (downloadSize - count < bufLen) {
+                    bufLen = (int) (downloadSize - count);
+                    if (bufLen == 0) {
+                        break;
+                    }
+                    buffer = new byte[bufLen];
                 }
-                currentPart.close();
-                inStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            }
+            response.flushBuffer();
+        } catch (IOException e) {
+            System.out.println("数据被暂停或中断。");
+            e.printStackTrace();
+        } finally {
+            if (null != out) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    System.out.println("数据被暂停或中断。");
+                    e.printStackTrace();
+                }
+            }
+            if (null != in) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    System.out.println("数据被暂停中断。");
+                    e.printStackTrace();
+                }
             }
         }
     }

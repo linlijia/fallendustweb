@@ -20,10 +20,10 @@ public class RedisAspect {
     @Around("execution(* com.common.utils.RedisUtils.*(..))")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = null;
-        if(open){
-            try{
+        if (open) {
+            try {
                 result = point.proceed();
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.error("redis error", e);
                 throw new RRException("Redis服务异常");
             }

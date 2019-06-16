@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface OpsRecordDao extends BaseMapper<OpsRecordEntity> {
-	
+
 }

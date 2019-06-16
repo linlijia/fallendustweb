@@ -7,8 +7,6 @@ import com.modules.generator.entity.DeviceStatusHistoryEntity;
 import java.util.Map;
 
 /**
- * 
- *
  * @author novacaine
  * @email xxxxx@gmail.com
  * @date 2019-04-21 16:56:50

@@ -6,16 +6,22 @@ import com.common.utils.R;
 import com.modules.generator.entity.DeviceDataEntity;
 import com.modules.generator.entity.SiteEntity;
 import com.modules.generator.service.DeviceDataService;
+import com.modules.generator.service.ReportService;
 import com.modules.generator.service.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("generator/devicedata")
 public class ReportController {
+    @Autowired
+    private ReportService reportService;
     @Autowired
     private DeviceDataService deviceDataService;
     @Autowired
@@ -57,5 +63,25 @@ public class ReportController {
         deviceDataEntities.put("dustDataAvg", deviceDataEntities.get("dustDataAvg"));
 
         return R.ok().put("data", deviceDataEntities);
+    }
+
+    @RequestMapping("/exception")
+    public R Exception(String month, String city) {
+        /*
+        1.按数据排序（降序）；
+        2.离线天数，故障天数，异常天数；
+        3.提供城市、年月选择；
+        **/
+        if (month == null || "".equals(month.trim())) {
+            return R.error(400, "必须选择年月");
+        }
+        if (city == null || "".equals(city.trim())) {
+            city = "上海市";
+        }
+        Date start = DateUtils.stringToDate(month, DateUtils.MONTH_PATTERN);
+        Date end = DateUtils.addDateMonths(start, 1);
+
+
+        return null;
     }
 }

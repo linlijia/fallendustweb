@@ -28,12 +28,12 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
                                   NativeWebRequest request, WebDataBinderFactory factory) throws Exception {
         //获取用户ID
         Object object = request.getAttribute(AuthorizationInterceptor.USER_KEY, RequestAttributes.SCOPE_REQUEST);
-        if(object == null){
+        if (object == null) {
             return null;
         }
 
         //获取用户信息
-        UserEntity user = userService.selectById((Long)object);
+        UserEntity user = userService.selectById((Long) object);
 
         return user;
     }

@@ -4,12 +4,14 @@ package com.common.utils;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class DateUtils {
     /**
@@ -163,5 +165,23 @@ public class DateUtils {
     public static Date addDateYears(Date date, int years) {
         DateTime dateTime = new DateTime(date);
         return dateTime.plusYears(years).toDate();
+    }
+
+    /**
+     * 从开始日期和结合日期获取日期列表
+     *
+     * @param startDay 开始日期
+     * @param endDay   结束日期
+     * @return 日期列表(字符串类型)
+     */
+    public static String[] getRangeDays(String startDay, String endDay) {
+        DateTime startTime = new DateTime(startDay);
+        DateTime endTime = new DateTime(endDay);
+        int numberOfDays = Days.daysBetween(startTime, endTime).getDays();
+        String[] arr = new String[numberOfDays + 1];
+        for (int i = 0; i <= numberOfDays; i++) {
+            arr[i] = startTime.plusDays(i).toString("yyyy-MM-dd");
+        }
+        return arr;
     }
 }

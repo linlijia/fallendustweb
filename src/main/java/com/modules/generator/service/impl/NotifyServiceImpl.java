@@ -34,8 +34,8 @@ public class NotifyServiceImpl extends ServiceImpl<NotifyDao, NotifyEntity> impl
 
         if (params.get("is_read") != null) {
             ew.eq("is_read", params.get("is_read"));
-        }else{
-            ew.eq("is_read",0);
+        } else {
+            ew.eq("is_read", 0);
         }
 
 

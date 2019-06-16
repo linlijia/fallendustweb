@@ -1,14 +1,16 @@
 package com.common.utils;
 
 public class Constant {
-	/** 超级管理员ID */
-	public static final int SUPER_ADMIN = 1;
+    /**
+     * 超级管理员ID
+     */
+    public static final int SUPER_ADMIN = 1;
 
     public enum MenuType {
         /**
          * 目录
          */
-    	CATALOG(0),
+        CATALOG(0),
         /**
          * 菜单
          */
@@ -33,18 +35,18 @@ public class Constant {
         /**
          * 正常
          */
-    	NORMAL(0),
+        NORMAL(0),
         /**
          * 暂停
          */
-    	PAUSE(1);
+        PAUSE(1);
 
         private int value;
 
         ScheduleStatus(int value) {
             this.value = value;
         }
-        
+
         public int getValue() {
             return value;
         }

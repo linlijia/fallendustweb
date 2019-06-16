@@ -9,17 +9,17 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @Import({DynamicDataSourceConfig.class})
 @MapperScan(value = "com.modules.*.dao")
 public class DustApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DustApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DustApplication.class, args);
+    }
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(DustApplication.class);
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(DustApplication.class);
+    }
 }

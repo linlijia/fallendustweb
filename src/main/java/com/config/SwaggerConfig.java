@@ -33,29 +33,29 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(apiInfo())
-            .select()
-            //加了ApiOperation注解的类，才生成接口文档
-            .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-            //包下的类，才生成接口文档
-            //.apis(RequestHandlerSelectors.basePackage("com.controller"))
-            .paths(PathSelectors.any())
-            .build()
-            .securitySchemes(security());
+                .apiInfo(apiInfo())
+                .select()
+                //加了ApiOperation注解的类，才生成接口文档
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                //包下的类，才生成接口文档
+                //.apis(RequestHandlerSelectors.basePackage("com.controller"))
+                .paths(PathSelectors.any())
+                .build()
+                .securitySchemes(security());
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("文档平台")
-            .description("文档")
-            .termsOfServiceUrl("")
-            .version("2.1")
-            .build();
+                .title("文档平台")
+                .description("文档")
+                .termsOfServiceUrl("")
+                .version("2.1")
+                .build();
     }
 
     private List<ApiKey> security() {
         return newArrayList(
-            new ApiKey("token", "token", "header")
+                new ApiKey("token", "token", "header")
         );
     }
 

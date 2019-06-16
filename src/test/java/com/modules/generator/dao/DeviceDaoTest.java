@@ -19,14 +19,14 @@ import java.util.Map;
 public class DeviceDaoTest {
     @Test
     public void listDeviceSiteByMap() {
-        DeviceDao deviceDao = (DeviceDao)SpringContextUtils.getBean("deviceDao");
-        Map<String,Object> params = new HashMap<>();
-        params.put("page","1");
-        params.put("limit","10");
+        DeviceDao deviceDao = (DeviceDao) SpringContextUtils.getBean("deviceDao");
+        Map<String, Object> params = new HashMap<>();
+        params.put("page", "1");
+        params.put("limit", "10");
         Page page = new Query<DeviceSiteVO>(params).getPage();
 
-        List<DeviceSiteVO> res = deviceDao.listDeviceSiteByMap(page,new EntityWrapper<DeviceSiteVO>().like("site",""));
-        for(DeviceSiteVO r:res){
+        List<DeviceSiteVO> res = deviceDao.listDeviceSiteByMap(page, new EntityWrapper<DeviceSiteVO>().like("site", ""));
+        for (DeviceSiteVO r : res) {
             System.out.println(r.getSite());
         }
     }

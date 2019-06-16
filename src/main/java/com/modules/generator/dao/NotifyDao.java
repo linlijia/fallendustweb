@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface NotifyDao extends BaseMapper<NotifyEntity> {
-	
+
 }
