@@ -12,7 +12,6 @@ import com.modules.generator.pojo.ReportTemplateVO;
 import com.modules.generator.service.DeviceDataService;
 import com.modules.generator.service.ReportService;
 import com.modules.generator.service.SiteService;
-import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class ReportServiceImpl implements ReportService {
         reportTemplateVO.setSitePoints(sitePoint);
         List<ReportTemplateSitePointPicVO> reportTemplateSitePointPicVOS = new ArrayList<ReportTemplateSitePointPicVO>();
 
-        Pair<String[], Map<String, Vector<Serie>>> pair = deviceDataHistory(start, end, city);
+        Map.Entry<String[], Map<String, Vector<Serie>>> pair = deviceDataHistory(start, end, city);
 
 
         //生成点位数据分析图
@@ -79,7 +78,7 @@ public class ReportServiceImpl implements ReportService {
      * @param pair key为日期范围，value为每个站点的每日数据
      * @return
      */
-    public Map<String, byte[]> generateSitePointImage(Pair<String[], Map<String, Vector<Serie>>> pair) {
+    public Map<String, byte[]> generateSitePointImage(Map.Entry<String[], Map<String, Vector<Serie>>> pair) {
         Map<String, byte[]> result = new HashMap<>();
 
         String[] categories = pair.getKey();
@@ -101,7 +100,7 @@ public class ReportServiceImpl implements ReportService {
      * @param city  城市
      * @return pair key为日期范围，value为每个站点的每日数据
      */
-    public Pair<String[], Map<String, Vector<Serie>>> deviceDataHistory(Date start, Date end, String city) {
+    public Map.Entry<String[], Map<String, Vector<Serie>>> deviceDataHistory(Date start, Date end, String city) {
         Map<String, Vector<Serie>> result = new HashMap<>();
 
         EntityWrapper<DeviceDataEntity> ew = new EntityWrapper();
@@ -133,8 +132,10 @@ public class ReportServiceImpl implements ReportService {
             series.add(serie);
             result.put(ds.getKey(), series);
         }
-        Pair<String[], Map<String, Vector<Serie>>> pair = new Pair<>(categories, result);
-        return pair;
+        Map<String[], Map<String, Vector<Serie>>> m = new HashMap();
+        m.put(categories, result);
+        return (Map.Entry<String[], Map<String, Vector<Serie>>>) m.entrySet().toArray()[0];
+
     }
 
 }
