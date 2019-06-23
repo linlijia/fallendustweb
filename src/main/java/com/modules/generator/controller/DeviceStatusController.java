@@ -1,14 +1,16 @@
 package com.modules.generator.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
 import com.modules.generator.entity.DeviceEntity;
+import com.modules.generator.entity.DeviceStatus;
 import com.modules.generator.entity.DeviceStatusEntity;
-import com.modules.generator.service.DeviceService;
-import com.modules.generator.service.DeviceStatusHistoryService;
-import com.modules.generator.service.DeviceStatusService;
+import com.modules.generator.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +24,13 @@ public class DeviceStatusController {
     @Autowired
     private DeviceStatusService deviceStatusService;
     @Autowired
+    private DeviceStatusExService deviceStatusExService;
+    @Autowired
     private DeviceService deviceService;
     @Autowired
     private DeviceStatusHistoryService deviceStatusHistoryService;
+    @Autowired
+    private DeviceStatusHistoryExService deviceStatusHistoryExService;
 
     /**
      * 列表
@@ -65,7 +71,6 @@ public class DeviceStatusController {
             deviceStatus.setCity(deviceEntity.getCity());
         }
 
-
         //插入历史数据表
         deviceStatusHistoryService.insert(deviceStatus.convert2DeviceStatusHistory());
 
@@ -76,6 +81,45 @@ public class DeviceStatusController {
             deviceStatus.setId(deviceStatusEntity.get(0).getId());
         }
         deviceStatusService.insertOrUpdate(deviceStatus);
+        return R.ok();
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save/ex")
+    @RequiresPermissions("generator:devicestatus:save")
+    public R saveEx(@RequestBody DeviceStatus deviceStatus) {
+        DeviceEntity deviceEntity = deviceService.selectOne(new EntityWrapper<DeviceEntity>().eq("mn", deviceStatus.getMn()));
+        DeviceStatusEntity deviceStatusEntity = deviceStatus.convert2DeviceStatusEntity();
+        if (deviceEntity != null) {
+            deviceEntity.setOperation(deviceStatus.getOperation());
+            deviceService.insertOrUpdate(deviceEntity);
+            deviceStatus.setSiteId(deviceEntity.getSiteId());
+            deviceStatusEntity.setSiteId(deviceEntity.getSiteId());
+            deviceStatus.setSiteName(deviceEntity.getSiteName());
+            deviceStatusEntity.setSiteName(deviceEntity.getSiteName());
+            deviceStatus.setCity(deviceEntity.getCity());
+            deviceStatusEntity.setCity(deviceEntity.getCity());
+        }
+        //插入当前数据表 现用
+        List<DeviceStatusEntity> deviceStatusEntityList = deviceStatusService.selectList(
+                new EntityWrapper<DeviceStatusEntity>().eq("mn", deviceStatus.getMn()));
+        if (deviceStatusEntityList != null && deviceStatusEntityList.size() > 0) {
+            deviceStatusEntity.setId(deviceStatusEntityList.get(0).getId());
+        }
+//        System.out.println("转~~~~~~"+JSON.toJSONString(deviceStatusEntity));
+        deviceStatusService.insertOrUpdate(deviceStatusEntity);
+        //插入历史数据表
+        deviceStatusHistoryExService.insert(deviceStatus.convert2DeviceStatusHistory());
+
+        //插入当前数据表
+        List<DeviceStatus> deviceStatusList = deviceStatusExService.selectList(
+                new EntityWrapper<DeviceStatus>().eq("mn", deviceStatus.getMn()));
+        if (deviceStatusList != null && deviceStatusList.size() > 0) {
+            deviceStatus.setId(deviceStatusList.get(0).getId());
+        }
+        deviceStatusExService.insertOrUpdate(deviceStatus);
         return R.ok();
     }
 

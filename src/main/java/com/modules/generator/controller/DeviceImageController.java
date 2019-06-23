@@ -83,7 +83,7 @@ public class DeviceImageController {
 
         String dateTime = DateUtils.format(new Date(), DateUtils.DATE_PATTERN);
 
-        String path = uploadPath + mn + "/" + dateTime;
+        String path = uploadPath + "/" + dateTime;
         File target = new File(path);
         if (!target.exists()) {
             target.mkdirs();
@@ -93,7 +93,7 @@ public class DeviceImageController {
         File newFile = new File(path, filename);
         file.transferTo(newFile);
 
-        String filePath = fileServer + "/files/" + "opsImage/" + dateTime + "/" + filename;
+        String filePath = fileServer + "/files/" + dateTime + File.separator + filename;
         DeviceImageEntity deviceImageEntity = new DeviceImageEntity();
         deviceImageEntity.setMn(mn);
         deviceImageEntity.setPath(filePath);
