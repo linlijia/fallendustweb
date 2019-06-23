@@ -10,6 +10,7 @@ import com.modules.generator.service.DeviceStatusService;
 import com.modules.generator.entity.DeviceStatusEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 
@@ -36,5 +37,11 @@ public class DeviceStatusServiceImpl extends ServiceImpl<DeviceStatusDao, Device
 
         return new PageUtils(page);
     }
+
+    @Override
+    public int onlineCount(Date lastUploadDate) {
+        return this.baseMapper.selectOnlineCount(lastUploadDate);
+    }
+
 
 }

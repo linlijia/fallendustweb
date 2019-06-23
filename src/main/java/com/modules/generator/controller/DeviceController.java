@@ -9,6 +9,7 @@ import com.modules.generator.Enums;
 import com.modules.generator.entity.DeviceEntity;
 import com.modules.generator.entity.SiteEntity;
 import com.modules.generator.service.DeviceService;
+import com.modules.generator.service.DeviceStatusService;
 import com.modules.generator.service.SiteService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class DeviceController {
     private SiteService siteService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private DeviceStatusService deviceStatusService;
 
     /**
      * 列表
@@ -102,17 +105,17 @@ public class DeviceController {
         int total = deviceService.selectCount(null);
         int failure = deviceService.selectCount(new EntityWrapper<DeviceEntity>().eq("operation", 0));
         Calendar beforeTime = Calendar.getInstance();
-        // 5分钟没有上报数据设备离线
-        beforeTime.add(Calendar.MINUTE, -30);
-        int offline = deviceService.selectCount(new EntityWrapper<DeviceEntity>().le("last_upload_data",
-                beforeTime.getTime()));
+        // 5分钟没上报状态数据就认为是离线s
+        beforeTime.add(Calendar.MINUTE, -5);
+        int onlineCount = deviceStatusService.onlineCount(beforeTime.getTime());
+
         Map<String, Integer> result = new HashMap<>();
         //总设备
         result.put("total", total);
         //设备在线
-        result.put("online", total - offline);
+        result.put("online", onlineCount);
         //设备离线
-        result.put("offline", offline);
+        result.put("offline", total - onlineCount);
         //设备故障
         result.put("failure", failure);
         return R.ok().put("count", result);
