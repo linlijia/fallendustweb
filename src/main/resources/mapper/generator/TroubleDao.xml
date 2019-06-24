@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.modules.generator.dao.TroubleDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.modules.generator.entity.TroubleEntity" id="troubleMap">
+        <result property="id" column="id"/>
+        <result property="happenTime" column="happen_time"/>
+        <result property="mn" column="mn"/>
+        <result property="troubleCode" column="trouble_code"/>
+        <result property="troubleDescription" column="trouble_description"/>
+        <result property="solved" column="solved"/>
+        <result property="solvedTime" column="solved_time"/>
+        <result property="solvedMethod" column="solved_method"/>
+        <result property="troubleShooter" column="trouble_shooter"/>
+    </resultMap>
+
+
+</mapper>

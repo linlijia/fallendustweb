@@ -1,25 +1,71 @@
 package com.modules.generator.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.modules.generator.Enums;
 
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author novacaine
+ * @email superman@gmail.com
+ * @date 2019-06-23 23:54:50
+ */
 @TableName("dust_trouble")
 public class TroubleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     *
+     */
     @TableId
     private Integer id;
+    /**
+     *
+     */
     private Date happenTime;
+    /**
+     *
+     */
     private String mn;
+    /**
+     *
+     */
     private Integer troubleCode;
+    @TableField(exist = false)
+    private String troublCodeName;
+    /**
+     *
+     */
     private String troubleDescription;
-    private boolean solved;
+    /**
+     *
+     */
+    private Integer solved;
+    /**
+     *
+     */
     private Date solvedTime;
+    /**
+     *
+     */
     private Integer solvedMethod;
-    private Integer solvedShooter;
+    /**
+     * 故障解决人员（0：表示前端系统自己恢复）
+     */
+    private Integer troubleShooter;
+
+    private void setTroubleCode(Integer troubleCode) {
+        this.troubleCode = troubleCode;
+        for (Enums.TroubleType v : Enums.TroubleType.values()) {
+            if (troubleCode == v.getCode()) {
+                this.troublCodeName = v.getTroubleName();
+            }
+        }
+
+    }
 
     public Integer getId() {
         return id;
@@ -49,8 +95,12 @@ public class TroubleEntity implements Serializable {
         return troubleCode;
     }
 
-    public void setTroubleCode(Integer troubleCode) {
-        this.troubleCode = troubleCode;
+    public String getTroublCodeName() {
+        return troublCodeName;
+    }
+
+    public void setTroublCodeName(String troublCodeName) {
+        this.troublCodeName = troublCodeName;
     }
 
     public String getTroubleDescription() {
@@ -61,11 +111,11 @@ public class TroubleEntity implements Serializable {
         this.troubleDescription = troubleDescription;
     }
 
-    public boolean isSolved() {
+    public Integer getSolved() {
         return solved;
     }
 
-    public void setSolved(boolean solved) {
+    public void setSolved(Integer solved) {
         this.solved = solved;
     }
 
@@ -85,11 +135,11 @@ public class TroubleEntity implements Serializable {
         this.solvedMethod = solvedMethod;
     }
 
-    public Integer getSolvedShooter() {
-        return solvedShooter;
+    public Integer getTroubleShooter() {
+        return troubleShooter;
     }
 
-    public void setSolvedShooter(Integer solvedShooter) {
-        this.solvedShooter = solvedShooter;
+    public void setTroubleShooter(Integer troubleShooter) {
+        this.troubleShooter = troubleShooter;
     }
 }

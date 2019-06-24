@@ -6,6 +6,15 @@ import com.modules.generator.entity.TroubleEntity;
 
 import java.util.Map;
 
+/**
+ * 
+ *
+ * @author novacaine
+ * @email superman@gmail.com
+ * @date 2019-06-23 23:54:50
+ */
 public interface TroubleService extends IService<TroubleEntity> {
+
     PageUtils queryPage(Map<String, Object> params);
 }
+
