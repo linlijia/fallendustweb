@@ -29,7 +29,7 @@ public class TroubleController {
     @RequestMapping("/list")
     @RequiresPermissions("generator:trouble:list")
     public R list(@RequestParam Map<String, Object> params) {
-        PageUtils page = troubleService.queryPage(params);
+        PageUtils page = troubleService.queryTroubleVOPage(params);
         return R.ok().put("page", page);
     }
 

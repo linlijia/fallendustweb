@@ -7,7 +7,7 @@ import com.modules.generator.entity.TroubleEntity;
 import java.util.Map;
 
 /**
- * 
+ *
  *
  * @author novacaine
  * @email superman@gmail.com
@@ -16,5 +16,7 @@ import java.util.Map;
 public interface TroubleService extends IService<TroubleEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    PageUtils queryTroubleVOPage(Map<String, Object> params);
 }
 
