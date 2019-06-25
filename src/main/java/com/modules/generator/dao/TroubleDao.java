@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,4 +24,8 @@ public interface TroubleDao extends BaseMapper<TroubleEntity> {
             "dust_device on dust_trouble.mn = dust_device.mn left join sys_user on " +
             " dust_trouble.trouble_shooter = sys_user.user_id where 1=1 ${ew.sqlSegment}")
     List<TroubleVO> voPage(Page<TroubleVO> param, @Param("ew") Wrapper<TroubleVO> wrapper);
+
+    @Select("select * from dust_device left join dust_trouble on dust_trouble.mn = dust_device.mn " +
+            "  where happen_time > #{start} and happen_time < #{end} or happen_time is NULL ")
+    List<TroubleVO> troubleRanking(@Param("start") Date start, @Param("end") Date end);
 }

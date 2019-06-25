@@ -1,5 +1,6 @@
 package com.modules.generator.controller;
 
+import com.common.utils.DateUtils;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
 import com.modules.generator.Enums;
@@ -49,7 +50,6 @@ public class TroubleController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("generator:trouble:save")
     public R save(@RequestBody TroubleEntity trouble) {
         troubleService.insert(trouble);
 
@@ -82,7 +82,6 @@ public class TroubleController {
      * 异常状态列表
      */
     @RequestMapping("/type")
-//    @RequiresPermissions("generator:trouble:type")
     public R type() {
         List<Map<String, String>> types = new ArrayList<>(28);
         for (Enums.TroubleType troubleType : Enums.TroubleType.values()) {
@@ -92,5 +91,24 @@ public class TroubleController {
             types.add(type);
         }
         return R.ok().put("data", types);
+    }
+
+
+    @RequestMapping("/ranking")
+    public R Rinking(String month, String city) {
+        /*
+        1.按数据排序（降序）；
+        2.离线天数，故障天数，异常天数；
+        3.提供城市、年月选择；
+        **/
+        if (month == null || "".equals(month.trim())) {
+            return R.error(400, "必须选择年月");
+        }
+        if (city == null || "".equals(city.trim())) {
+            city = "上海市";
+        }
+        Date start = DateUtils.stringToDate(month, DateUtils.MONTH_PATTERN);
+        Date end = DateUtils.addDateMonths(start, 1);
+        return R.ok().put("data", troubleService.troubleRanking(start, end));
     }
 }
