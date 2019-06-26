@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.common.utils.DateUtils;
 import com.common.utils.PageUtils;
 import com.common.utils.Query;
+import com.modules.generator.Enums;
 import com.modules.generator.dao.TroubleDao;
 import com.modules.generator.entity.TroubleEntity;
 import com.modules.generator.pojo.TroubleRankingVO;
@@ -66,7 +67,7 @@ public class TroubleServiceImpl extends ServiceImpl<TroubleDao, TroubleEntity> i
                 continue;
             }
 
-            if (troubleVO.getTroubleCode() != 90101) {
+            if (troubleVO.getTroubleCode() != Enums.TroubleType.OFFLINE.getCode()) {
                 ranking.get(troubleVO.getSiteName()).get("offline").add(date);
             } else {
                 ranking.get(troubleVO.getSiteName()).get("breakdown").add(date);
