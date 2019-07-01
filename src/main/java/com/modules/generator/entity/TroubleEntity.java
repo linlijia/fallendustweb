@@ -59,9 +59,11 @@ public class TroubleEntity implements Serializable {
 
     private void setTroubleCode(Integer troubleCode) {
         this.troubleCode = troubleCode;
-        for (Enums.TroubleType v : Enums.TroubleType.values()) {
-            if (troubleCode == v.getCode()) {
-                this.troublCodeName = v.getTroubleName();
+        if (troubleCode != null) {
+            for (Enums.TroubleType v : Enums.TroubleType.values()) {
+                if (troubleCode == v.getCode()) {
+                    this.troublCodeName = v.getTroubleName();
+                }
             }
         }
 

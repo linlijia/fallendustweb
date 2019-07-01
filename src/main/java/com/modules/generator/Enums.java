@@ -56,7 +56,9 @@ public class Enums {
     public enum NotifyMsgType {
         OpsTask("运维任务"),
         UploadStatus("系统通知"),
-        OpenDoor("其他");
+        OpenDoor("其他"),
+        Trouble("故障通知");
+
         private final String msgType;
 
         NotifyMsgType(String msgType) {

@@ -1,10 +1,17 @@
 package com.modules.generator.controller;
 
+import com.common.utils.DateUtils;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
+import com.common.utils.ShiroUtils;
 import com.modules.generator.Enums;
+import com.modules.generator.entity.DeviceEntity;
+import com.modules.generator.entity.NotifyEntity;
 import com.modules.generator.entity.TroubleEntity;
+import com.modules.generator.service.DeviceService;
+import com.modules.generator.service.NotifyService;
 import com.modules.generator.service.TroubleService;
+import com.modules.sys.entity.SysUserEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +29,11 @@ import java.util.*;
 public class TroubleController {
     @Autowired
     private TroubleService troubleService;
+    @Autowired
+    private NotifyService notifyService;
+    @Autowired
+    private DeviceService deviceService;
+
 
     /**
      * 列表
@@ -29,7 +41,7 @@ public class TroubleController {
     @RequestMapping("/list")
     @RequiresPermissions("generator:trouble:list")
     public R list(@RequestParam Map<String, Object> params) {
-        PageUtils page = troubleService.queryPage(params);
+        PageUtils page = troubleService.queryTroubleVOPage(params);
         return R.ok().put("page", page);
     }
 
@@ -49,10 +61,23 @@ public class TroubleController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("generator:trouble:save")
     public R save(@RequestBody TroubleEntity trouble) {
         troubleService.insert(trouble);
-
+        SysUserEntity userEntity = ShiroUtils.getUserEntity();
+        NotifyEntity notifyEntity = new NotifyEntity();
+        notifyEntity.setCreator(userEntity.getUserId().intValue());
+        notifyEntity.setCreatorName(userEntity.getName());
+        notifyEntity.setUserName("前端系统");
+        notifyEntity.setType(Enums.NotifyMsgType.Trouble.getMsgType());
+        List<DeviceEntity> deviceEntities = deviceService.selectByMn(trouble.getMn());
+        if (deviceEntities != null && deviceEntities.size() > 0) {
+            notifyEntity.setContent("站点：" + deviceEntities.get(0).getSiteName() + "，设备发生故障，" +
+                    "设备mn：" + trouble.getMn() + " 故障编码：" + trouble.getTroubleCode() + " 故障类型：" + trouble.getTroublCodeName()
+                    + "故障描述：" + trouble.getTroubleDescription() + " 发生时间："
+                    + DateUtils.format(trouble.getHappenTime(),DateUtils.DATE_TIME_PATTERN)
+            );
+        }
+        notifyService.insert(notifyEntity);
         return R.ok();
     }
 
@@ -82,7 +107,6 @@ public class TroubleController {
      * 异常状态列表
      */
     @RequestMapping("/type")
-//    @RequiresPermissions("generator:trouble:type")
     public R type() {
         List<Map<String, String>> types = new ArrayList<>(28);
         for (Enums.TroubleType troubleType : Enums.TroubleType.values()) {
@@ -92,5 +116,24 @@ public class TroubleController {
             types.add(type);
         }
         return R.ok().put("data", types);
+    }
+
+
+    @RequestMapping("/ranking")
+    public R Rinking(String month, String city) {
+        /*
+        1.按数据排序（降序）；
+        2.离线天数，故障天数，异常天数；
+        3.提供城市、年月选择；
+        **/
+        if (month == null || "".equals(month.trim())) {
+            return R.error(400, "必须选择年月");
+        }
+        if (city == null || "".equals(city.trim())) {
+            city = "上海市";
+        }
+        Date start = DateUtils.stringToDate(month, DateUtils.MONTH_PATTERN);
+        Date end = DateUtils.addDateMonths(start, 1);
+        return R.ok().put("data", troubleService.troubleRanking(start, end));
     }
 }
