@@ -5,14 +5,9 @@ import com.common.annotation.SysLog;
 import com.common.utils.DateUtils;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
-import com.modules.generator.entity.DeviceDataEntity;
-import com.modules.generator.entity.DeviceEntity;
-import com.modules.generator.entity.DeviceStatusEntity;
-import com.modules.generator.entity.SiteEntity;
-import com.modules.generator.service.DeviceDataService;
-import com.modules.generator.service.DeviceService;
-import com.modules.generator.service.DeviceStatusService;
-import com.modules.generator.service.SiteService;
+import com.modules.generator.entity.*;
+import com.modules.generator.pojo.MonthlyDustFallVo;
+import com.modules.generator.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +26,8 @@ public class SiteController {
     private DeviceDataService deviceDataService;
     @Autowired
     private DeviceStatusService deviceStatusService;
-    private Map<String, SiteEntity> siteEntityMap;
+    @Autowired
+    private MonthlyDustFallService monthlyDustFallService;
 
     /**
      * 列表
@@ -112,16 +108,17 @@ public class SiteController {
             Map<String, Object> e = entry.getValue();
 
         }
+        Map<String, MonthlyDustFallVo> monthlyDustFallMap = monthlyDustFallService.selectLastestData();
         List<Map<String, Object>> list = new ArrayList<>();
         for (SiteEntity siteEntity : siteEntities) {
             Map<String, Object> r = new HashMap<>();
             r.put("ID", siteEntity.getId());
             r.put("siteName", siteEntity.getSite());
-            Map<String, Object> e = data.get(siteEntity.getSite());
-            r.put("weight", e == null ? "-" : e.get("avgRtd"));
-            r.put("dust", e == null ? "-" : e.get("avgDust"));
-            r.put("effectiveDay", e == null ? "-" : e.get("avgEffectiveDay"));
-            r.put("weighingTime", e == null ? "-" : e.get("dataTime"));
+            MonthlyDustFallVo monthlyDustFallVo = monthlyDustFallMap.get(siteEntity.getSite());
+            r.put("weight", monthlyDustFallVo == null ? "-" : monthlyDustFallVo.getWeight());
+            r.put("dust", monthlyDustFallVo == null ? "-" : monthlyDustFallVo.getDustFall());
+            r.put("effectiveDay", monthlyDustFallVo == null ? "-" : monthlyDustFallVo.getEffectiveDays());
+            r.put("weighingTime", monthlyDustFallVo == null ? "-" : monthlyDustFallVo.getDataTime());
             list.add(r);
         }
         return R.ok().put("data", list);

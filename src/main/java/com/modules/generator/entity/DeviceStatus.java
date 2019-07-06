@@ -53,6 +53,7 @@ public class DeviceStatus implements Serializable {
     private Integer printMode;
     private Integer operation;
     private Integer currentStatus;
+    private String troubleSet;
     private Integer siteId;
     private String siteName;
     private String city;

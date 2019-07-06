@@ -89,6 +89,8 @@ npm run build
  
 ## 启动
 nohup java -jar iot-gateway-0.0.1-SNAPSHOT.jar > iot-gateway.log 2>&1 &
+nohup java -jar dust.jar > app.log 2>&1 &
+
 
 # 备份
 ## 数据库备

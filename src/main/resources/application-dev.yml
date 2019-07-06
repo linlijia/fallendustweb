@@ -4,13 +4,13 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         druid:
             first:
-                url: jdbc:mysql://47.104.4.223:3306/dust?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-                username: root
-                password: 28A*#d69e65d0a7726
+                url: jdbc:mysql://47.101.41.233:3306/dust?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+                username: fallendust
+                password: -pL,MkO0
             second:
-                url: jdbc:mysql://47.104.4.223:3306/dust?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-                username: root
-                password: 28A*#d69e65d0a7726
+                url: jdbc:mysql://47.101.41.233:3306/dust?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+                username: fallendust
+                password: -pL,MkO0
             initial-size: 10
             max-active: 100
             min-idle: 10
@@ -36,3 +36,7 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+
+logging:
+  level:
+    com.modules.generator.dao: DEBUG;

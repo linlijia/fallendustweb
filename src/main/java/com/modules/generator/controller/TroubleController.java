@@ -93,6 +93,16 @@ public class TroubleController {
     }
 
     /**
+     * 修改前端
+     */
+    @RequestMapping("/put")
+    public R put(@RequestBody TroubleEntity trouble) {
+        troubleService.updateById(trouble);
+
+        return R.ok();
+    }
+
+    /**
      * 删除
      */
     @RequestMapping("/delete")

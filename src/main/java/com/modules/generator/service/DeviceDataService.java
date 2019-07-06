@@ -21,5 +21,7 @@ public interface DeviceDataService extends IService<DeviceDataEntity> {
      * @return
      */
     Map<String, Object> calculation(Date startTime, Date endTime, String city);
+
+    DeviceDataEntity selectLastMonthData(String mn, Date startTime, Date endTime);
 }
 

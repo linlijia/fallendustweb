@@ -76,7 +76,6 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataDao, DeviceData
             siteLastDivecesData.get(deviceDataEntity.getSiteName()).put(deviceDataEntity.getMn(), deviceDataEntity);
         }
 
-
         Map<String, Map<String, Object>> dustResult = new HashMap<>();
         float totalDustAvg = 0f;
         for (Map.Entry<String, Map<String, DeviceDataEntity>> entry : siteLastDivecesData.entrySet()) {
@@ -112,6 +111,11 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataDao, DeviceData
         result.put("dustData", dustResult);
         result.put("dustDataAvg", String.format("%.2f", totalDustAvg / siteLastDivecesData.size()));
         return result;
+    }
+
+    @Override
+    public DeviceDataEntity selectLastMonthData(String mn, Date startTime, Date endTime) {
+        return this.baseMapper.selectLastMonthLastData(mn, startTime, endTime);
     }
 
 }

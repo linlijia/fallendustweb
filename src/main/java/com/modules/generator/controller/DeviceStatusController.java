@@ -1,16 +1,14 @@
 package com.modules.generator.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
+import com.modules.generator.Enums;
 import com.modules.generator.entity.DeviceEntity;
 import com.modules.generator.entity.DeviceStatus;
 import com.modules.generator.entity.DeviceStatusEntity;
 import com.modules.generator.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +37,7 @@ public class DeviceStatusController {
     @RequiresPermissions("generator:devicestatus:list")
     public R list(@RequestParam Map<String, Object> params) {
         //增加参数 last=true表示只查最后一条记录
-        PageUtils page = deviceStatusService.queryPage(params);
+        PageUtils page = deviceStatusExService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -77,7 +75,7 @@ public class DeviceStatusController {
         //插入当前数据表
         List<DeviceStatusEntity> deviceStatusEntity = deviceStatusService.selectList(
                 new EntityWrapper<DeviceStatusEntity>().eq("mn", deviceStatus.getMn()));
-        if (deviceStatusEntity != null && deviceStatusEntity.size() > 0) {
+        if (deviceStatusEntity != null && !deviceStatusEntity.isEmpty()) {
             deviceStatus.setId(deviceStatusEntity.get(0).getId());
         }
         deviceStatusService.insertOrUpdate(deviceStatus);
@@ -93,7 +91,11 @@ public class DeviceStatusController {
         DeviceEntity deviceEntity = deviceService.selectOne(new EntityWrapper<DeviceEntity>().eq("mn", deviceStatus.getMn()));
         DeviceStatusEntity deviceStatusEntity = deviceStatus.convert2DeviceStatusEntity();
         if (deviceEntity != null) {
-            deviceEntity.setOperation(deviceStatus.getOperation());
+            if (deviceStatus.getOperation() == Enums.TroubleType.NO_TROUBLE.getCode()) {
+                deviceEntity.setOperation(0);
+            } else {
+                deviceEntity.setOperation(1);
+            }
             deviceService.insertOrUpdate(deviceEntity);
             deviceStatus.setSiteId(deviceEntity.getSiteId());
             deviceStatusEntity.setSiteId(deviceEntity.getSiteId());
@@ -105,10 +107,9 @@ public class DeviceStatusController {
         //插入当前数据表 现用
         List<DeviceStatusEntity> deviceStatusEntityList = deviceStatusService.selectList(
                 new EntityWrapper<DeviceStatusEntity>().eq("mn", deviceStatus.getMn()));
-        if (deviceStatusEntityList != null && deviceStatusEntityList.size() > 0) {
+        if (deviceStatusEntityList != null && !deviceStatusEntityList.isEmpty()) {
             deviceStatusEntity.setId(deviceStatusEntityList.get(0).getId());
         }
-//        System.out.println("转~~~~~~"+JSON.toJSONString(deviceStatusEntity));
         deviceStatusService.insertOrUpdate(deviceStatusEntity);
         //插入历史数据表
         deviceStatusHistoryExService.insert(deviceStatus.convert2DeviceStatusHistory());
@@ -116,7 +117,7 @@ public class DeviceStatusController {
         //插入当前数据表
         List<DeviceStatus> deviceStatusList = deviceStatusExService.selectList(
                 new EntityWrapper<DeviceStatus>().eq("mn", deviceStatus.getMn()));
-        if (deviceStatusList != null && deviceStatusList.size() > 0) {
+        if (deviceStatusList != null && !deviceStatusList.isEmpty()) {
             deviceStatus.setId(deviceStatusList.get(0).getId());
         }
         deviceStatusExService.insertOrUpdate(deviceStatus);
@@ -170,7 +171,7 @@ public class DeviceStatusController {
         //插入当前数据表
         List<DeviceStatusEntity> deviceStatusEntityList = deviceStatusService.selectList(
                 new EntityWrapper<DeviceStatusEntity>().eq("mn", mn));
-        if (deviceStatusEntityList != null && deviceStatusEntityList.size() > 0) {
+        if (deviceStatusEntityList != null && !deviceStatusEntityList.isEmpty()) {
             deviceStatusEntity.setId(deviceStatusEntityList.get(0).getId());
         }
         deviceStatusEntity.setMn(mn);

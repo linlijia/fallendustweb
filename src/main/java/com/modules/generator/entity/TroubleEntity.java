@@ -43,7 +43,7 @@ public class TroubleEntity implements Serializable {
     /**
      *
      */
-    private Integer solved;
+    private Boolean solved;
     /**
      *
      */
@@ -113,11 +113,11 @@ public class TroubleEntity implements Serializable {
         this.troubleDescription = troubleDescription;
     }
 
-    public Integer getSolved() {
+    public Boolean getSolved() {
         return solved;
     }
 
-    public void setSolved(Integer solved) {
+    public void setSolved(Boolean solved) {
         this.solved = solved;
     }
 

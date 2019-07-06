@@ -1,6 +1,5 @@
 package com.modules.generator.entity;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
@@ -53,5 +52,5 @@ public class DeviceStatusHistory implements Serializable {
     private Integer printMode;
     private Integer operation;
     private Integer currentStatus;
-
+    private String troubleSet;
 }

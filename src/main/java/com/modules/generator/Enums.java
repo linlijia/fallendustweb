@@ -6,10 +6,14 @@ import java.io.Serializable;
 
 public class Enums {
     public enum DeviceCommand {
-        UploadData("上传数据", "2011"),
-        UploadStatus("上传状态", "2000"),
+        /**
+         * 远程控制指令
+         */
+
         OpenDoor("开舱门", "9003"),
         CloseDoor("关舱门", "9004"),
+        TrayUp("托盘上升", "9001"),
+        TrayDown("托盘下降", "9002"),
         OpenFillLight("开补光灯", "9005"),
         CloseFillLight("关补光灯", "9006"),
         TakePhoto("拍照", "9007"),
@@ -20,16 +24,17 @@ public class Enums {
         OpenHumidification("开加湿", "9012"),
         CloseHumidification("关加湿", "9013"),
         MovementCalibration("机芯校准", "9014"),
-        MovementClear("机芯清零", "9015"),
+        WeighingEmptyBucket("空桶称量", "9015"),
         MovementPower("机芯上电", "9016"),
         MovementShutdown("机芯关机", "9017"),
-        SingleWeighing("单重量", "9018"),
-        ViewInsideBucket("查看内筒", "9019"),
-        Drying("烘干", "9020"),
-        BalanceBeforeWeighing("称量前平衡", "9021"),
+        MoveTrayToBalancePosition("托盘至平衡位", "9018"),
         Weighing("称量（全过程）", "9022"),
-        CloseAlarm("关报警", "9023"),
-        Unlock("解锁", "9024"),
+        StartToStandby("启动复位检测", "9031"),
+        StopToStandby("停止复位检测", "9032"),
+        SavePotentiometerUpperLimitValue("保存电位器上限位", "9033"),
+        SavePotentiometerResetValue("保存电位器复位值", "9034"),
+        TrayUpByStep("托盘按部上升", "9035"),
+        TrayDownByStep("托盘按部下降", "9036"),
         UpdateApp("App更新", "9101"),
         UpdateConfig("配置更新", "9102"),
         updateRestart("设备重启", "9103"),
@@ -78,6 +83,7 @@ public class Enums {
         UNABLE_TO_CALIBRATION(90203, "机芯无法校准"),
         UNABLE_TO_CLEAR(90204, "机芯无法清零"),
         WEIGHT_DATA_OVERRANGE_HEAVY(90205, "重量数据严重超量程"),
+        EMPTY_BUCKET_WEIGHT_EXCEPTION(90206, "空桶重量异常"),
         DOOR_POSITION_EXCEPTION(90301, "门状态异常"),
         OPEN_DOOR_FAILURE(90302, "开门故障"),
         CLOSE_DOOR_FAILURE(90303, "关门故障"),
