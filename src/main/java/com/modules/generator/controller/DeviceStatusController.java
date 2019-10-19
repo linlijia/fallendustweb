@@ -1,5 +1,6 @@
 package com.modules.generator.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
@@ -7,6 +8,7 @@ import com.modules.generator.Enums;
 import com.modules.generator.entity.DeviceEntity;
 import com.modules.generator.entity.DeviceStatus;
 import com.modules.generator.entity.DeviceStatusEntity;
+import com.modules.generator.entity.DeviceStatusEx;
 import com.modules.generator.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,15 @@ public class DeviceStatusController {
     @Autowired
     private DeviceStatusExService deviceStatusExService;
     @Autowired
+    private DeviceStatusExExService deviceStatusExExService;
+    @Autowired
     private DeviceService deviceService;
     @Autowired
     private DeviceStatusHistoryService deviceStatusHistoryService;
     @Autowired
     private DeviceStatusHistoryExService deviceStatusHistoryExService;
+    @Autowired
+    private DeviceStatusHistoryExExService deviceStatusHistoryExExService;
 
     /**
      * 列表
@@ -38,6 +44,18 @@ public class DeviceStatusController {
     public R list(@RequestParam Map<String, Object> params) {
         //增加参数 last=true表示只查最后一条记录
         PageUtils page = deviceStatusExService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list/ex")
+    @RequiresPermissions("generator:devicestatus:list")
+    public R listEx(@RequestParam Map<String, Object> params) {
+        //增加参数 last=true表示只查最后一条记录
+        PageUtils page = deviceStatusExExService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -125,6 +143,32 @@ public class DeviceStatusController {
     }
 
     /**
+     * 保存
+     */
+    @RequestMapping("/save/ex2")
+    @RequiresPermissions("generator:devicestatus:save")
+    public R saveEx2(@RequestBody DeviceStatusEx deviceStatusEx) {
+        DeviceEntity deviceEntity = deviceService.selectOne(new EntityWrapper<DeviceEntity>().eq("mn", deviceStatusEx.getMn()));
+        if (deviceEntity != null) {
+            deviceService.insertOrUpdate(deviceEntity);
+            deviceStatusEx.setSiteId(deviceEntity.getSiteId());
+            deviceStatusEx.setSiteName(deviceEntity.getSiteName());
+            deviceStatusEx.setCity(deviceEntity.getCity());
+        }
+        //插入历史数据表
+        deviceStatusHistoryExExService.insert(deviceStatusEx.convert2DeviceStatusExHistory());
+
+        //插入当前数据表
+        List<DeviceStatusEx> deviceStatusList = deviceStatusExExService.selectList(
+                new EntityWrapper<DeviceStatusEx>().eq("mn", deviceStatusEx.getMn()));
+        if (deviceStatusList != null && !deviceStatusList.isEmpty()) {
+            deviceStatusEx.setId(deviceStatusList.get(0).getId());
+        }
+        deviceStatusExExService.insertOrUpdate(deviceStatusEx);
+        return R.ok();
+    }
+
+    /**
      * 修改
      */
     @RequestMapping("/update")
@@ -183,6 +227,4 @@ public class DeviceStatusController {
 
         return R.ok();
     }
-
-
 }

@@ -4,17 +4,10 @@ server:
     uri-encoding: UTF-8
     max-threads: 1000
     min-spare-threads: 30
-  port: 8080
+  port: 8081
   connection-timeout: 5000ms
   servlet:
     context-path: /dust
-
-file-server: http://47.104.4.223:8080${server.servlet.context-path}
-static-file-path: /data/dust-files
-upload-file-path: ${static-file-path}/opsImage/ # 运维图片
-report-file-path: ${static-file-path}/reports  # 月报
-template: ${report-file-path}/template.docx # 月报模板
-
 
 spring:
   # 环境 dev|test|prod

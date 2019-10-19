@@ -78,6 +78,17 @@ public class DeviceDataEntity implements Serializable {
      */
     private Float a34011Day;
 
+    /**
+     * 内校砝码值
+     */
+    private Float weight;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date taskStartTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date taskEndTime;
+    private Integer month;
+    private Boolean replacedCylinder;
 
     /**
      * 设置：ID
@@ -255,6 +266,14 @@ public class DeviceDataEntity implements Serializable {
         this.a34011Day = a34011Day;
     }
 
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
+        this.weight = weight;
+    }
+
     public Integer getSiteId() {
         return siteId;
     }
@@ -285,5 +304,37 @@ public class DeviceDataEntity implements Serializable {
 
     public void setDustData(String dustData) {
         this.dustData = dustData;
+    }
+
+    public Date getTaskStartTime() {
+        return taskStartTime;
+    }
+
+    public void setTaskStartTime(Date taskStartTime) {
+        this.taskStartTime = taskStartTime;
+    }
+
+    public Date getTaskEndTime() {
+        return taskEndTime;
+    }
+
+    public void setTaskEndTime(Date taskEndTime) {
+        this.taskEndTime = taskEndTime;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Boolean getReplacedCylinder() {
+        return replacedCylinder;
+    }
+
+    public void setReplacedCylinder(Boolean replacedCylinder) {
+        this.replacedCylinder = replacedCylinder;
     }
 }

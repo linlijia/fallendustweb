@@ -20,6 +20,6 @@ public interface MonthlyDustFallDao extends BaseMapper<MonthlyDustFall> {
 
     @Select("SELECT site_id, site_name, c.* FROM dust_device AS device LEFT JOIN (SELECT a.* FROM t_monthly_dust_fall AS a INNER JOIN (\n" +
             "SELECT mn, MAX(data_time) AS data_time FROM t_monthly_dust_fall GROUP BY mn) AS b ON a.mn = b.mn AND a.data_time = b.data_time) AS c\n" +
-            "ON device.mn = c.mn GROUP BY site_id \n")
+            "ON device.mn = c.mn WHERE device.mn LIKE 'ZYJC%' GROUP BY site_id \n")
     List<MonthlyDustFallVo> selectLastestData();
 }

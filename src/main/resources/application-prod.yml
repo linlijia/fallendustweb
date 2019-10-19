@@ -36,3 +36,9 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+
+file-server: http://47.104.4.223:8080${server.servlet.context-path}
+static-file-path: /data/dust-files
+upload-file-path: ${static-file-path}/opsImage/ # 运维图片
+report-file-path: ${static-file-path}/reports  # 月报
+template: ${report-file-path}/template.docx # 月报模板

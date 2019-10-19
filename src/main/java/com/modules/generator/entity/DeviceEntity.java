@@ -82,6 +82,34 @@ public class DeviceEntity implements Serializable {
     private Integer taskMinute;
 
     /**
+     * 开机芯时，热盘所处位置
+     */
+    private Integer startupBalancePosition;
+
+    /**
+     * 加水时，热盘所处位置
+     */
+    private Integer addWaterPosition;
+
+    /**
+     * 往集尘缸加水时长，单位秒
+     */
+    private Integer addWaterToCylinderDuration;
+
+    /**
+     * 最高加热温度
+     */
+    private Integer maxHeatingTemperature;
+    /**
+     * 最低加热温度
+     */
+    private Integer minHeatingTemperature;
+    /**
+     * 热盘与环境温度差值，用于平衡模式结束判断
+     */
+    private Integer coolingTemperatureDifference;
+
+    /**
      * 设置：ID
      */
     public void setId(Integer id) {
@@ -288,5 +316,53 @@ public class DeviceEntity implements Serializable {
 
     public void setTaskMinute(Integer taskMinute) {
         this.taskMinute = taskMinute;
+    }
+
+    public Integer getStartupBalancePosition() {
+        return startupBalancePosition;
+    }
+
+    public void setStartupBalancePosition(Integer startupBalancePosition) {
+        this.startupBalancePosition = startupBalancePosition;
+    }
+
+    public Integer getAddWaterPosition() {
+        return addWaterPosition;
+    }
+
+    public void setAddWaterPosition(Integer addWaterPosition) {
+        this.addWaterPosition = addWaterPosition;
+    }
+
+    public Integer getAddWaterToCylinderDuration() {
+        return addWaterToCylinderDuration;
+    }
+
+    public void setAddWaterToCylinderDuration(Integer addWaterToCylinderDuration) {
+        this.addWaterToCylinderDuration = addWaterToCylinderDuration;
+    }
+
+    public Integer getMaxHeatingTemperature() {
+        return maxHeatingTemperature;
+    }
+
+    public void setMaxHeatingTemperature(Integer maxHeatingTemperature) {
+        this.maxHeatingTemperature = maxHeatingTemperature;
+    }
+
+    public Integer getMinHeatingTemperature() {
+        return minHeatingTemperature;
+    }
+
+    public void setMinHeatingTemperature(Integer minHeatingTemperature) {
+        this.minHeatingTemperature = minHeatingTemperature;
+    }
+
+    public Integer getCoolingTemperatureDifference() {
+        return coolingTemperatureDifference;
+    }
+
+    public void setCoolingTemperatureDifference(Integer coolingTemperatureDifference) {
+        this.coolingTemperatureDifference = coolingTemperatureDifference;
     }
 }

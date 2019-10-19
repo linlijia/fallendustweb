@@ -16,10 +16,12 @@ public class DeviceSiteVO extends DeviceEntity implements Serializable {
         this.site = site;
     }
 
+    @Override
     public String getCity() {
         return city;
     }
 
+    @Override
     public void setCity(String city) {
         this.city = city;
     }
