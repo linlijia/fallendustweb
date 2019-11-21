@@ -32,6 +32,10 @@ public class DeviceEntity implements Serializable {
      */
     private String mn;
     /**
+     * 设备型号
+     */
+    private String model;
+    /**
      * 接口根路径
      */
     private String interfacePath;
@@ -94,6 +98,10 @@ public class DeviceEntity implements Serializable {
     /**
      * 往集尘缸加水时长，单位秒
      */
+    private Integer floodingDuration;
+    /**
+     * 往集尘缸加水时长，单位秒
+     */
     private Integer addWaterToCylinderDuration;
 
     /**
@@ -149,6 +157,14 @@ public class DeviceEntity implements Serializable {
      */
     public String getMn() {
         return mn;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     /**
@@ -332,6 +348,14 @@ public class DeviceEntity implements Serializable {
 
     public void setAddWaterPosition(Integer addWaterPosition) {
         this.addWaterPosition = addWaterPosition;
+    }
+
+    public Integer getFloodingDuration() {
+        return floodingDuration;
+    }
+
+    public void setFloodingDuration(Integer floodingDuration) {
+        this.floodingDuration = floodingDuration;
     }
 
     public Integer getAddWaterToCylinderDuration() {

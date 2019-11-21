@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -150,10 +151,10 @@ public class DeviceStatusController {
     public R saveEx2(@RequestBody DeviceStatusEx deviceStatusEx) {
         DeviceEntity deviceEntity = deviceService.selectOne(new EntityWrapper<DeviceEntity>().eq("mn", deviceStatusEx.getMn()));
         if (deviceEntity != null) {
-            deviceService.insertOrUpdate(deviceEntity);
             deviceStatusEx.setSiteId(deviceEntity.getSiteId());
             deviceStatusEx.setSiteName(deviceEntity.getSiteName());
             deviceStatusEx.setCity(deviceEntity.getCity());
+            deviceStatusEx.setStorageTime(new Date());
         }
         //插入历史数据表
         deviceStatusHistoryExExService.insert(deviceStatusEx.convert2DeviceStatusExHistory());
@@ -164,7 +165,9 @@ public class DeviceStatusController {
         if (deviceStatusList != null && !deviceStatusList.isEmpty()) {
             deviceStatusEx.setId(deviceStatusList.get(0).getId());
         }
-        deviceStatusExExService.insertOrUpdate(deviceStatusEx);
+        if (deviceStatusEx.getResend() != null && !deviceStatusEx.getResend()) {
+            deviceStatusExExService.insertOrUpdate(deviceStatusEx);
+        }
         return R.ok();
     }
 

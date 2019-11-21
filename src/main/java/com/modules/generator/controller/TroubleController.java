@@ -1,5 +1,7 @@
 package com.modules.generator.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.common.utils.DateUtils;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
@@ -82,6 +84,15 @@ public class TroubleController {
     }
 
     /**
+     * 批量保存
+     */
+    @RequestMapping("/savelist")
+    public R saveList(@RequestBody List<TroubleEntity> troubleList) {
+        troubleService.insertOrUpdateBatch(troubleList);
+        return R.ok();
+    }
+
+    /**
      * 修改
      */
     @RequestMapping("/update")
@@ -95,10 +106,18 @@ public class TroubleController {
     /**
      * 修改前端
      */
-    @RequestMapping("/put")
+    @PutMapping("/put")
     public R put(@RequestBody TroubleEntity trouble) {
-        troubleService.updateById(trouble);
-
+        EntityWrapper<TroubleEntity> wrapper = new EntityWrapper<>();
+        wrapper.where("happen_time = '" + trouble.getHappenTime() + "' AND mn = '" + trouble.getMn() + "'");
+        TroubleEntity selectedTrouble = (TroubleEntity) troubleService.selectObj(wrapper);
+        if (selectedTrouble != null) {
+            selectedTrouble.setSolved(trouble.getSolved());
+            selectedTrouble.setSolvedMethod(trouble.getSolvedMethod());
+            selectedTrouble.setSolvedTime(trouble.getSolvedTime());
+            selectedTrouble.setTroubleShooter(trouble.getTroubleShooter());
+        }
+        troubleService.insertOrUpdate(selectedTrouble);
         return R.ok();
     }
 

@@ -27,6 +27,10 @@ public class AppUpdateEntity implements Serializable {
      */
     private String appName;
     /**
+     * 适用设备的型号
+     */
+    private String model;
+    /**
      * 版本
      */
     private String version;
@@ -69,6 +73,14 @@ public class AppUpdateEntity implements Serializable {
      */
     public String getAppName() {
         return appName;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     /**

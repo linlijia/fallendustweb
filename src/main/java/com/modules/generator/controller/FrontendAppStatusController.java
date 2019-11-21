@@ -25,6 +25,7 @@ public class FrontendAppStatusController {
         if (row != null) {
             frontendAppStatusEntity.setId(row.getId());
         }
+        frontendAppStatusEntity.setStorageTime(new Date());
         boolean result = frontendAppStatusService.insertOrUpdate(frontendAppStatusEntity);
         return result ? R.ok() : R.error();
     }

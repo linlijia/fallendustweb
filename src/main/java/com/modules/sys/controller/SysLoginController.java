@@ -110,9 +110,9 @@ public class SysLoginController extends AbstractController {
 
         //生成token，并保存到数据库
         R r = sysUserTokenService.createToken(user.getUserId());
-        int expire = Integer.parseInt(r.get("expire").toString());
-        Date date = new Date();
-        r.put("expire", DateUtils.addDateSeconds(date, expire));
+//        int expire = Integer.parseInt(r.get("expire").toString());
+//        Date date = new Date();
+//        r.put("expire", DateUtils.addDateSeconds(date, expire));
         return r;
     }
 

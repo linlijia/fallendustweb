@@ -35,10 +35,13 @@ public class Enums {
         SavePotentiometerResetValue("保存电位器复位值", "9034"),
         TrayUpByStep("托盘按部上升", "9035"),
         TrayDownByStep("托盘按部下降", "9036"),
+        addWater("往集尘缸加水", "9039"),
+        addWaterToPitcher("往水罐加水", "9040"),
         UpdateApp("App更新", "9101"),
         UpdateConfig("配置更新", "9102"),
         updateRestart("设备重启", "9103"),
-        EquipmentMaintenanceStatus("设备维护状态下发", "9104");
+        EquipmentMaintenanceStatus("设备维护状态下发", "9104"),
+        updateRebootBoard("重启控制板", "9105");
         private final String cmdName;
         private final String code;
 

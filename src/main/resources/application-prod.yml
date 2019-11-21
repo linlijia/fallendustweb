@@ -37,7 +37,7 @@ spring:
                     config:
                         multi-statement-allow: true
 
-file-server: http://47.104.4.223:8080${server.servlet.context-path}
+file-server: http://47.101.41.233:8080${server.servlet.context-path}
 static-file-path: /data/dust-files
 upload-file-path: ${static-file-path}/opsImage/ # 运维图片
 report-file-path: ${static-file-path}/reports  # 月报

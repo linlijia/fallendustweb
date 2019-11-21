@@ -47,6 +47,8 @@ public class DeviceStatusEx implements Serializable {
     private Float weightWeight;
     private Integer systemMode;
     private String errorCode;
+    private Boolean resend;
+    private Date storageTime;
     private Integer operation;
     private Integer currentStatus;
     private Integer currentPeriod;

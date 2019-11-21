@@ -64,6 +64,7 @@ public class DeviceDetailController {
                 dataVo.setSampleDays(deviceData.getA34011Day());
                 dataVo.setStartInsideTemperature(startDeviceStatus.getMeasuringRoomTemperature());
                 dataVo.setStartInsideHumidity(startDeviceStatus.getMeasuringRoomHumidity());
+                dataVo.setEndHotPlateTemperature(endDeviceStatus.getPlateTemperature1());
                 dataVo.setEndInsideTemperature(endDeviceStatus.getMeasuringRoomTemperature());
                 dataVo.setEndInsideHumidity(endDeviceStatus.getMeasuringRoomHumidity());
                 dataVo.setStartOutsideTemperature(startDeviceStatus.getEnvironmentTemperature());
@@ -79,4 +80,9 @@ public class DeviceDetailController {
         return R.ok().put("page", page);
     }
 
+    @RequestMapping("/historydatalist")
+    public R historyStatusList(@RequestParam Map<String, Object> params) {
+        PageUtils page =  deviceStatusHistoryExExService.queryPage(params);
+        return R.ok().put("page", page);
+    }
 }

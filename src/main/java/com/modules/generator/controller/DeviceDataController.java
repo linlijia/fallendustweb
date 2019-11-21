@@ -77,6 +77,7 @@ public class DeviceDataController {
         if (deviceData.getA34011Flag() == null) {
             return R.error(400, "a34011Flag参数不能为空，a34011Day,a34011Rtd,a34011Flag是必填参数");
         }
+        deviceData.setStorageTime(new Date());
         DeviceEntity deviceEntity = deviceService.selectOne(new EntityWrapper<DeviceEntity>().eq("mn", deviceData.getMn()));
         deviceData.setSiteId(deviceEntity.getSiteId());
         deviceData.setSiteName(deviceEntity.getSiteName());

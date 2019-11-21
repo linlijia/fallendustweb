@@ -24,6 +24,7 @@ public class DeviceDataVo implements Serializable {
     private float sampleDays;
     private float startInsideTemperature;
     private float startInsideHumidity;
+    private float endHotPlateTemperature;
     private float endInsideTemperature;
     private float endInsideHumidity;
     private float startOutsideTemperature;

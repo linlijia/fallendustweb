@@ -19,6 +19,7 @@ public class FrontendAppStatusEntity implements Serializable {
     private Date startupTime;
     private Date connectionTime;
     private Date updateTime;
+    private Date storageTime;
 
     public Integer getId() {
         return id;
@@ -82,5 +83,13 @@ public class FrontendAppStatusEntity implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Date getStorageTime() {
+        return storageTime;
+    }
+
+    public void setStorageTime(Date storageTime) {
+        this.storageTime = storageTime;
     }
 }

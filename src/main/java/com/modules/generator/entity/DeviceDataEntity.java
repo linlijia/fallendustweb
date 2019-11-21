@@ -89,6 +89,8 @@ public class DeviceDataEntity implements Serializable {
     private Date taskEndTime;
     private Integer month;
     private Boolean replacedCylinder;
+    private Boolean resend;
+    private Date storageTime;
 
     /**
      * 设置：ID
@@ -336,5 +338,21 @@ public class DeviceDataEntity implements Serializable {
 
     public void setReplacedCylinder(Boolean replacedCylinder) {
         this.replacedCylinder = replacedCylinder;
+    }
+
+    public Boolean getResend() {
+        return resend;
+    }
+
+    public void setResend(Boolean resend) {
+        this.resend = resend;
+    }
+
+    public Date getStorageTime() {
+        return storageTime;
+    }
+
+    public void setStorageTime(Date storageTime) {
+        this.storageTime = storageTime;
     }
 }

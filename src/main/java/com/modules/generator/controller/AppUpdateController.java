@@ -18,10 +18,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -96,8 +93,15 @@ public class AppUpdateController {
     @RequestMapping("/delete")
     @RequiresPermissions("generator:appupdate:delete")
     public R delete(@RequestBody Integer[] ids) {
-        appUpdateService.deleteBatchIds(Arrays.asList(ids));
-
+        List<AppUpdateEntity> list = appUpdateService.selectBatchIds(Arrays.asList(ids));
+        List<Integer> deleteList = new ArrayList<>();
+        for (AppUpdateEntity entity : list) {
+            boolean result = new File(uploadPath + entity.getPath()).delete();
+            if (result) {
+                deleteList.add(entity.getId());
+            }
+        }
+        appUpdateService.deleteBatchIds(deleteList);
         return R.ok();
     }
 
@@ -132,6 +136,20 @@ public class AppUpdateController {
         entityEntityWrapper.orderBy("id", false);
         List<AppUpdateEntity> appUpdateEntity = appUpdateService.selectList(entityEntityWrapper);
         if (appUpdateEntity == null || appUpdateEntity.size() == 0) {
+            throw new FileNotFoundException("please upload app file first");
+        }
+        String fullPath = uploadPath + appUpdateEntity.get(0).getPath();
+        DownloadUtil.download(request, response, fullPath);
+    }
+
+    @GetMapping("/downloadex/{model}")
+    public void getDownload(@PathVariable("model") String model, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+        // Get your file stream from wherever.
+        EntityWrapper<AppUpdateEntity> entityEntityWrapper = new EntityWrapper();
+        entityEntityWrapper.where("model = \"" + model + "\"");
+        entityEntityWrapper.orderBy("id", false);
+        List<AppUpdateEntity> appUpdateEntity = appUpdateService.selectList(entityEntityWrapper);
+        if (appUpdateEntity == null || appUpdateEntity.isEmpty()) {
             throw new FileNotFoundException("please upload app file first");
         }
         String fullPath = uploadPath + appUpdateEntity.get(0).getPath();

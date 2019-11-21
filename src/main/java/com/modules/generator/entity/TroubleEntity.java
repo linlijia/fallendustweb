@@ -3,6 +3,7 @@ package com.modules.generator.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.modules.generator.Enums;
 
 import java.io.Serializable;
@@ -25,6 +26,7 @@ public class TroubleEntity implements Serializable {
     /**
      *
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date happenTime;
     /**
      *
@@ -47,6 +49,7 @@ public class TroubleEntity implements Serializable {
     /**
      *
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date solvedTime;
     /**
      *
